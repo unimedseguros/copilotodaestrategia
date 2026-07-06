@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copiloto da Estratégia · Seguros Unimed</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#003087;--azul-med:#005EB8;--azul-light:#E8F0FB;--azul-line:#C8D8F0;--verde:#00843D;--verde-light:#E6F4EC;--amber:#F59E0B;--amber-light:#FEF3C7;--red:#DC2626;--red-light:#FEE2E2;--purple:#7C3AED;--purple-light:#EDE9FE;--bg:#F4F6FA;--white:#FFFFFF;--gray1:#F8FAFC;--gray2:#EEF2F7;--gray3:#CBD5E1;--text:#0F172A;--text2:#475569;--text3:#94A3B8;--border:#E2E8F0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px}
+
+/* HEADER */
+.header{background:var(--azul);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,48,135,.2);position:sticky;top:0;z-index:100}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-logo{background:var(--white);border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:4px}
+.brand-logo img{width:100%;height:100%;object-fit:contain}
+.brand-text strong{color:#fff;font-size:15px;font-weight:700;display:block;letter-spacing:-.2px}
+.brand-text span{color:rgba(255,255,255,.65);font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.5px}
+.header-right{display:flex;align-items:center;gap:8px}
+.pill-live{font-family:'DM Mono',monospace;font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(0,132,61,.25);color:#6EE7B7;border:1px solid rgba(110,231,183,.3)}
+.btn-hdr{border:none;border-radius:7px;padding:6px 14px;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.btn-hdr:hover{opacity:.85}
+.btn-pdf{background:var(--white);color:var(--azul)}
+.btn-news{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.btn-ppt{background:#00843D;color:#fff}
+
+/* EDITION BAR */
+.edition-bar{background:var(--white);border-bottom:1px solid var(--border);padding:7px 40px;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text2)}
+.edition-bar label{font-weight:600;color:var(--text)}
+.edition-select{font-family:'Inter',sans-serif;font-size:12px;border:1px solid var(--border);border-radius:7px;padding:4px 10px;color:var(--text);background:var(--white);cursor:pointer;outline:none}
+.edition-select:focus{border-color:var(--azul-med)}
+
+/* NAV GRID */
+.section-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:0;background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:61px;z-index:90;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sec-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:11px 4px;cursor:pointer;border-right:1px solid var(--border);background:var(--white);transition:background .15s;border-bottom:3px solid transparent;user-select:none}
+.sec-card:last-child{border-right:none}
+.sec-card:hover{background:var(--gray1)}
+.sec-card.open{background:var(--azul-light);border-bottom-color:var(--azul-med)}
+.sec-card.open .sec-icon svg{stroke:var(--white)}
+.sec-card.open .sec-icon{background:var(--azul-med)}
+.sec-card.open .sec-label{color:var(--azul)}
+.sec-card.open .sec-arrow{transform:rotate(180deg);color:var(--azul-med)}
+.sec-icon{width:28px;height:28px;border-radius:7px;background:var(--gray2);display:flex;align-items:center;justify-content:center;transition:background .15s}
+.sec-icon svg{width:15px;height:15px;stroke:var(--text2);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:stroke .15s}
+.sec-label{font-size:8.5px;font-weight:700;color:var(--text2);text-align:center;line-height:1.3;letter-spacing:.2px}
+.sec-arrow{font-size:9px;color:var(--text3);transition:transform .25s,color .15s}
+
+/* ACCORDION */
+.acc-panel{overflow:hidden;max-height:0;transition:max-height .4s cubic-bezier(.4,0,.2,1);background:var(--bg)}
+.acc-panel.open{max-height:99999px}
+.acc-inner{padding:28px 40px;max-width:1300px;margin:0 auto}
+
+/* LABELS */
+.slabel{font-size:10px;font-weight:700;color:var(--azul-med);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border)}
+.sec-block{margin-bottom:24px}
+
+/* CARDS */
+.nfeed{display:flex;flex-direction:column;gap:10px}
+.ncard{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:13px 15px;display:flex;gap:12px;align-items:flex-start;transition:box-shadow .15s,border-color .15s}
+.ncard:hover{box-shadow:0 2px 8px rgba(0,48,135,.07);border-color:var(--azul-line)}
+.ntag{font-size:9px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:.5px;padding:3px 9px;border-radius:20px;flex-shrink:0;margin-top:1px;white-space:nowrap}
+.ntag.hot{background:var(--red-light);color:var(--red);border:1px solid #FCA5A5}
+.ntag.new{background:var(--verde-light);color:var(--verde);border:1px solid #86EFAC}
+.ntag.reg{background:var(--azul-light);color:var(--azul-med);border:1px solid var(--azul-line)}
+.ntag.opp{background:var(--purple-light);color:var(--purple);border:1px solid #C4B5FD}
+.ntag.wtf{background:var(--amber-light);color:#B45309;border:1px solid #FCD34D}
+.ntag.glob{background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE}
+.ncontent{flex:1}
+.nhead{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.4}
+.nhead a{color:var(--text);text-decoration:none}
+.nhead a:hover{color:var(--azul-med);text-decoration:underline}
+.ntxt{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:5px}
+.ntxt strong{color:var(--text);font-weight:600}
+.nmeta{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;flex-wrap:wrap}
+.nmeta a{color:var(--azul-med);text-decoration:none;font-weight:500}
+.nmeta a:hover{text-decoration:underline}
+.nmeta-dot{width:3px;height:3px;border-radius:50%;background:var(--gray3)}
+.impacto-br{display:inline-flex;align-items:center;gap:4px;font-size:9px;padding:2px 8px;border-radius:20px;background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE;font-family:'DM Mono',monospace;margin-top:5px}
+
+/* IMPL / OPP */
+.impl-box{background:var(--azul-light);border:1px solid var(--azul-line);border-left:4px solid var(--azul-med);border-radius:0 10px 10px 0;padding:14px 18px;margin-top:8px}
+.impl-title{font-size:10px;font-weight:700;color:var(--azul-med);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.impl-txt{font-size:12px;color:var(--text2);line-height:1.65}
+.impl-txt strong{color:var(--azul);font-weight:600}
+.opp-card{background:var(--verde-light);border:1px solid #86EFAC;border-left:4px solid var(--verde);border-radius:0 10px 10px 0;padding:12px 16px;margin-top:10px}
+.opp-label{font-size:10px;font-weight:700;color:var(--verde);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.opp-txt{font-size:12px;color:#166534;line-height:1.6}
+
+/* ALERT */
+.alert-bar{border-radius:10px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;font-size:12px;line-height:1.6}
+.alert-bar.bl{background:var(--azul-light);border:1px solid var(--azul-line);color:var(--azul)}
+.alert-bar.gl{background:#EFF6FF;border:1px solid #BFDBFE;color:#1D4ED8}
+.alert-ico{font-size:16px;flex-shrink:0}
+
+/* TERMÔMETRO */
+.termometro{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.termo-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:15px 17px;display:flex;align-items:flex-start;gap:12px}
+.termo-indicator{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.termo-indicator.ok{background:var(--verde-light)}.termo-indicator.att{background:var(--amber-light)}.termo-indicator.bad{background:var(--red-light)}
+.termo-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-family:'DM Mono',monospace;margin-bottom:4px}
+.termo-label.ok{color:var(--verde)}.termo-label.att{color:#B45309}.termo-label.bad{color:var(--red)}
+.termo-status{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.termo-reason{font-size:11px;color:var(--text2);line-height:1.5}
+
+/* VOZES */
+.vozes{display:flex;flex-direction:column;gap:10px}
+.voz-card{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--azul-med);border-radius:0 10px 10px 0;padding:13px 15px}
+.voz-quote{font-size:13px;color:var(--text);line-height:1.55;font-style:italic;margin-bottom:8px}
+.voz-quote::before{content:'\201C';color:var(--azul-med);font-size:18px;font-style:normal;margin-right:2px}
+.voz-quote::after{content:'\201D';color:var(--azul-med);font-size:18px;font-style:normal;margin-left:2px}
+.voz-meta{display:flex;align-items:center;gap:8px}
+.voz-avatar{width:30px;height:30px;border-radius:50%;background:var(--azul-light);border:1px solid var(--azul-line);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--azul-med);flex-shrink:0;font-family:'DM Mono',monospace}
+.voz-name{font-size:12px;font-weight:700;color:var(--text)}
+.voz-role{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace}
+.voz-ctx{margin-left:auto;font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;background:var(--gray2);padding:2px 8px;border-radius:20px;border:1px solid var(--border);white-space:nowrap}
+
+/* CONCORRENTES */
+.comp-block{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px}
+.comp-header{background:var(--gray1);border-bottom:1px solid var(--border);padding:11px 16px;display:flex;align-items:center;gap:10px}
+.comp-rank{font-family:'DM Mono',monospace;font-size:10px;background:var(--azul);color:white;padding:2px 8px;border-radius:20px;font-weight:500}
+.comp-name{font-size:13px;font-weight:700;color:var(--text);flex:1}
+.comp-type{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;padding:2px 9px;border-radius:20px;background:var(--gray2);border:1px solid var(--border)}
+.comp-body{padding:12px 16px}
+
+/* AGENDA */
+.agenda{display:flex;flex-direction:column;gap:10px}
+.agenda-item{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:13px 15px;display:flex;gap:13px;align-items:flex-start}
+.agenda-item:hover{box-shadow:0 2px 8px rgba(0,48,135,.07)}
+.agenda-num{width:27px;height:27px;border-radius:8px;background:var(--azul);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'DM Mono',monospace}
+.agenda-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.agenda-txt{font-size:12px;color:var(--text2);line-height:1.6}
+.agenda-txt strong{color:var(--text);font-weight:600}
+.agenda-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.agenda-tag{font-size:9px;font-family:'DM Mono',monospace;padding:2px 8px;border-radius:20px;background:var(--azul-light);color:var(--azul-med);border:1px solid var(--azul-line)}
+.agenda-tag.urgente{background:var(--red-light);color:var(--red);border-color:#FCA5A5}
+.agenda-tag.medio{background:var(--amber-light);color:#B45309;border-color:#FCD34D}
+.agenda-tag.longo{background:var(--verde-light);color:var(--verde);border-color:#86EFAC}
+
+/* BUSCA */
+.search-wrap{position:relative;margin-bottom:20px}
+.search-input{width:100%;padding:12px 16px 12px 44px;font-family:'Inter',sans-serif;font-size:14px;border:1px solid var(--border);border-radius:12px;background:var(--white);color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s}
+.search-input:focus{border-color:var(--azul-med);box-shadow:0 0 0 3px rgba(0,94,184,.1)}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3)}
+.search-icon svg{width:18px;height:18px;stroke:var(--text3);fill:none;stroke-width:2}
+.search-count{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)}
+.filter-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
+.filter-tag{font-size:10px;font-family:'DM Mono',monospace;padding:4px 12px;border-radius:20px;cursor:pointer;border:1px solid var(--border);background:var(--white);color:var(--text2);transition:all .15s;font-weight:600}
+.filter-tag:hover{border-color:var(--azul-med);color:var(--azul-med)}
+.filter-tag.active{background:var(--azul);color:#fff;border-color:var(--azul)}
+.search-results{display:flex;flex-direction:column;gap:10px}
+.search-empty{text-align:center;padding:40px;color:var(--text3);font-size:13px}
+.search-empty span{display:block;font-size:28px;margin-bottom:8px}
+.result-edicao{font-size:9px;font-family:'DM Mono',monospace;color:var(--azul-med);font-weight:700;margin-bottom:3px}
+mark{background:rgba(0,94,184,.15);color:var(--azul);border-radius:3px;padding:0 2px}
+
+/* HISTÓRICO */
+.historico-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.hist-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:box-shadow .15s,border-color .15s}
+.hist-card:hover{box-shadow:0 2px 12px rgba(0,48,135,.1);border-color:var(--azul-line)}
+.hist-card.atual{border-color:var(--azul-med);background:var(--azul-light)}
+.hist-badge{display:inline-block;font-size:9px;font-family:'DM Mono',monospace;padding:2px 8px;border-radius:20px;margin-bottom:8px;font-weight:700}
+.hist-badge.atual{background:var(--verde-light);color:var(--verde);border:1px solid #86EFAC}
+.hist-badge.old{background:var(--gray2);color:var(--text3);border:1px solid var(--border)}
+.hist-titulo{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px}
+.hist-data{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:8px}
+.hist-resumo{font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:12px}
+.hist-btn{font-size:11px;font-weight:700;color:var(--azul-med)}
+
+/* NEWSLETTER MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:16px;padding:32px;width:520px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.modal-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.modal-sub{font-size:12px;color:var(--text2);margin-bottom:24px;line-height:1.6}
+.modal-label{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.modal-preview{background:var(--azul-light);border:1px solid var(--azul-line);border-radius:10px;padding:14px;margin-bottom:20px;font-size:12px;color:var(--text2);line-height:1.7}
+.modal-preview strong{color:var(--azul)}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end}
+.modal-btn{padding:9px 20px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:opacity .15s}
+.modal-btn:hover{opacity:.85}
+.modal-btn.cancel{background:var(--gray2);color:var(--text2)}
+.modal-btn.send-outlook{background:var(--azul);color:#fff}
+.modal-btn.send-gmail{background:#EA4335;color:#fff}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;color:var(--text3);font-size:20px}
+
+.panel-divider{height:1px;background:var(--border);margin:0}
+.loading{text-align:center;padding:40px;color:var(--text3);font-family:'DM Mono',monospace;font-size:12px}
+footer{border-top:1px solid var(--border);background:var(--white);padding:13px 40px;display:flex;justify-content:space-between;align-items:center}
+footer p{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace}
+footer .su{color:var(--azul-med);font-weight:700}
+@media print{.header,.edition-bar,.section-grid{position:relative!important}.acc-panel{max-height:99999px!important}.modal-overlay{display:none!important}}
+
+/* BARRA DE BUSCA FIXA */
+.search-bar-fixed {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 40px;
+  position: sticky;
+  top: 131px;
+  z-index: 80;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+.search-bar-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.search-bar-icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.search-bar-icon svg {
+  width: 15px;
+  height: 15px;
+  stroke: var(--text3);
+  fill: none;
+  stroke-width: 2;
+}
+.search-bar-input {
+  width: 100%;
+  padding: 8px 14px 8px 38px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--gray1);
+  color: var(--text);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.search-bar-input:focus {
+  border-color: var(--azul-med);
+  box-shadow: 0 0 0 3px rgba(0,94,184,.1);
+  background: var(--white);
+}
+.search-bar-input::placeholder { color: var(--text3); }
+.search-bar-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--text3);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.search-bar-tags {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+}
+.search-bar-tag {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  padding: 3px 9px;
+  border-radius: 20px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--text2);
+  transition: all .15s;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.search-bar-tag:hover { border-color: var(--azul-med); color: var(--azul-med); }
+.search-bar-tag.active { background: var(--azul); color: #fff; border-color: var(--azul); }
+
+/* DROPDOWN DE RESULTADOS */
+.search-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,48,135,.12);
+  z-index: 300;
+  max-height: 420px;
+  overflow-y: auto;
+  padding: 8px;
+}
+.search-dropdown.open { display: block; }
+.search-drop-item {
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .12s;
+  border: 1px solid transparent;
+  margin-bottom: 4px;
+}
+.search-drop-item:last-child { margin-bottom: 0; }
+.search-drop-item:hover { background: var(--azul-light); border-color: var(--azul-line); }
+.search-drop-edicao {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: var(--azul-med);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.search-drop-titulo {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 2px;
+}
+.search-drop-meta {
+  font-size: 10px;
+  color: var(--text3);
+  font-family: 'DM Mono', monospace;
+}
+.search-drop-empty {
+  text-align: center;
+  padding: 24px;
+  color: var(--text3);
+  font-size: 12px;
+}
+
+
+/* ── RESPONSIVIDADE ─────────────────────────────────────────────────────── */
+
+/* ESCALA BASE — telas grandes (1400px+) fontes maiores */
+@media (min-width: 1400px) {
+  body { font-size: 15px; }
+  .nhead { font-size: 14px; }
+  .ntxt  { font-size: 13px; }
+  .nmeta { font-size: 11px; }
+  .sec-label { font-size: 10px; }
+  .acc-inner { padding: 32px 60px; }
+  .header, .edition-bar, .search-bar-fixed { padding-left: 60px; padding-right: 60px; }
+  .slabel { font-size: 11px; }
+  .impl-txt, .opp-txt { font-size: 13px; }
+  .agenda-txt, .voz-quote { font-size: 13px; }
+  .termo-status { font-size: 15px; }
+  .termo-reason { font-size: 12px; }
+}
+
+/* NOTEBOOK (900px–1199px) — compactar nav e ajustar espaçamento */
+@media (max-width: 1199px) {
+  .section-grid { grid-template-columns: repeat(5, 1fr); }
+  .sec-card:nth-child(n+6) { border-top: 1px solid var(--border); }
+  .sec-label { font-size: 8px; }
+  .sec-icon  { width: 26px; height: 26px; font-size: 13px; }
+  .acc-inner { padding: 24px 28px; }
+  .header    { padding: 14px 28px; }
+  .edition-bar, .search-bar-fixed { padding-left: 28px; padding-right: 28px; }
+  .termometro { grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .historico-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* TABLET (600px–899px) */
+@media (max-width: 899px) {
+  body { font-size: 14px; }
+  .header { padding: 12px 20px; flex-wrap: wrap; gap: 8px; }
+  .brand-text strong { font-size: 14px; }
+  .brand-text span   { font-size: 9px; }
+  .header-right { gap: 6px; }
+  .btn-hdr { padding: 5px 10px; font-size: 10px; }
+  .pill-live { display: none; }
+
+  .edition-bar { padding: 6px 20px; font-size: 11px; }
+
+  .section-grid { grid-template-columns: repeat(5, 1fr); top: 105px; }
+  .sec-label { font-size: 7.5px; }
+  .sec-icon  { width: 24px; height: 24px; font-size: 12px; }
+
+  .search-bar-fixed { padding: 6px 20px; top: 155px; }
+  .search-bar-input { font-size: 12px; padding: 7px 12px 7px 34px; }
+  .search-bar-tags  { display: none; }
+
+  .acc-inner { padding: 20px; }
+  .termometro { grid-template-columns: 1fr; gap: 8px; }
+  .termo-card { padding: 12px 14px; }
+
+  .historico-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .comp-header { flex-wrap: wrap; gap: 6px; }
+  .comp-type   { display: none; }
+
+  footer { flex-direction: column; gap: 4px; text-align: center; padding: 12px 20px; }
+}
+
+/* CELULAR (até 599px) — layout mobile completo */
+@media (max-width: 599px) {
+  body { font-size: 14px; }
+
+  /* Header mobile */
+  .header {
+    padding: 10px 16px;
+    flex-wrap: nowrap;
+    position: sticky; top: 0;
+  }
+  .brand-text span { display: none; }
+  .brand-text strong { font-size: 13px; }
+  .btn-ppt { display: none; }
+  .btn-pdf { padding: 5px 10px; font-size: 10px; }
+  .btn-news { display: none; }
+  .pill-live { display: none; }
+
+  /* Edition bar mobile */
+  .edition-bar {
+    padding: 6px 16px;
+    font-size: 11px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  #edition-info { display: none; }
+
+  /* Nav grid mobile — scroll horizontal */
+  .section-grid {
+    grid-template-columns: repeat(10, minmax(64px, 1fr));
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    top: 88px;
+    position: sticky;
+  }
+  .section-grid::-webkit-scrollbar { display: none; }
+  .sec-card {
+    padding: 10px 6px;
+    min-width: 64px;
+    border-right: 1px solid var(--border);
+  }
+  .sec-icon  { width: 26px; height: 26px; font-size: 13px; }
+  .sec-label { font-size: 7px; letter-spacing: 0; }
+  .sec-arrow { font-size: 8px; }
+
+  /* Busca mobile */
+  .search-bar-fixed {
+    padding: 6px 16px;
+    top: 148px;
+    position: sticky;
+  }
+  .search-bar-input { font-size: 13px; padding: 9px 12px 9px 36px; }
+  .search-bar-tags  { display: none; }
+  .search-bar-count { display: none; }
+
+  /* Conteúdo mobile */
+  .acc-inner { padding: 16px; }
+
+  .termometro {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .termo-card { padding: 12px; gap: 10px; }
+  .termo-indicator { width: 38px; height: 38px; font-size: 18px; }
+  .termo-status { font-size: 13px; }
+  .termo-reason { font-size: 11px; }
+
+  .ncard { padding: 12px; gap: 10px; }
+  .nhead { font-size: 13px; }
+  .ntxt  { font-size: 12px; }
+  .nmeta { font-size: 10px; flex-wrap: wrap; gap: 5px; }
+
+  .vozes { gap: 8px; }
+  .voz-card { padding: 12px; }
+  .voz-quote { font-size: 12px; }
+  .voz-ctx { display: none; }
+
+  .impl-box { padding: 12px 14px; }
+  .impl-txt { font-size: 12px; }
+  .opp-card { padding: 10px 14px; }
+  .opp-txt  { font-size: 12px; }
+
+  .comp-header { padding: 10px 12px; }
+  .comp-name   { font-size: 12px; }
+  .comp-type   { display: none; }
+  .comp-body   { padding: 10px 12px; }
+
+  .agenda-item { padding: 12px; gap: 10px; }
+  .agenda-num  { width: 24px; height: 24px; font-size: 11px; }
+  .agenda-title { font-size: 12px; }
+  .agenda-txt   { font-size: 11px; }
+
+  .historico-grid { grid-template-columns: 1fr; gap: 10px; }
+  .hist-card { padding: 14px; }
+
+  .slabel { font-size: 9px; letter-spacing: 1px; margin-bottom: 12px; }
+
+  footer {
+    flex-direction: column;
+    text-align: center;
+    padding: 12px 16px;
+    gap: 4px;
+  }
+  footer p:first-child { display: none; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="brand">
+    <div class="brand-logo">
+      <img src="https://www.segurosunimed.com.br/themes/custom/unimed_seguros/logo.svg"
+           onerror="this.onerror=null;this.src='https://www.segurosunimed.com.br/favicon.ico'"
+           alt="Seguros Unimed">
+    </div>
+    <div class="brand-text">
+      <strong>Copiloto da Estratégia</strong>
+      <span id="header-sub">GERÊNCIA DE ESTRATÉGIA · SEGUROS UNIMED</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <span class="pill-live">● Atualizado</span>
+    
+    <button class="btn-hdr btn-ppt" onclick="gerarPPTX()">📑 PPTX</button>
+    <button class="btn-hdr btn-pdf" onclick="window.print()">⬇ PDF</button>
+  </div>
+</div>
+
+<!-- EDITION BAR -->
+<div class="edition-bar">
+  <label>Edição:</label>
+  <select class="edition-select" id="edition-select" onchange="carregarEdicao(this.value)">
+    <option>Carregando...</option>
+  </select>
+  <span id="edition-info" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)"></span>
+</div>
+
+<!-- NAV GRID -->
+<div class="section-grid">
+  <!-- Notícias -->
+  <div class="sec-card open" onclick="toggle('geral')" id="card-geral">
+    <div class="sec-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg></div>
+    <div class="sec-label">Notícias da Semana</div>
+    <div class="sec-arrow">▾</div>
+  </div>
+  <!-- Saúde -->
+  <div class="sec-card" onclick="toggle('saude')" id="card-saude">
+    <div class="sec-icon"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+    <div class="sec-label">Saúde</div>
+    <div class="sec-arrow">▾</div>
+  </div>
+  <!-- Odonto -->
+  <div class="sec-card" onclick="toggle('odonto')" id="card-odonto">
+    <div class="sec-icon"><svg viewBox="0 0 24 24"><path d="M12 2C9 2 6 4 6 7c0 2 1 3.5 1 5.5 0 3 1 7.5 3 7.5 1 0 1.5-2 2-2s1 2 2 2c2 0 3-4.5 3-7.5 0-2 1-3.5 1-5.5 0-3-3-5-6-5z"/></svg></div>
+    <div class="sec-label">Odonto</div>
+    <div class="sec-arrow">▾</div>
+  </div>
+  <!-- Vida -->
+  <div class="sec-card" onclick="toggle('vida')" id="card-vida">
+    <div class="sec-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+    <div class="sec-label">Vida</div>
+    <div class="sec-arrow">▾</div>
+  </div>
+  <!-- Previdência -->
+  <div class="sec-card" onclick="toggle('previdencia')" id="card-previdencia">
+    <div class="sec-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M12 12v8"/></svg></div>
+    <div class="sec-label">Previdência</div>
+    <div class="sec-arrow">▾</div>
+  </div>
+  <!-- Elementares -->
+  <div class="sec-card" onclick="toggle('elementares')" id="card-elementares">
+    <div class="sec-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></div>
+    <div class="sec-label">Ramos Elementares</div>
+    <div class="sec-arrow">▾</div>
+  </div>
+  <!-- Global -->
+  <div class="sec-card" onclick="toggle('global')" id="card-global">
+    <div class="sec-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+    <div class="sec-label">Radar Global</div>
+    <div class="sec-arrow">▾</div>
+  </div>
+  <!-- Concorrentes -->
+  <div class="sec-card" onclick="toggle('concorrentes')" id="card-concorrentes">
+    <div class="sec-icon"><svg viewBox="0 0 24 24"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg></div>
+    <div class="sec-label">Concorrentes</div>
+    <div class="sec-arrow">▾</div>
+  </div>
+  <!-- Agenda -->
+  <!-- Corretores -->
+  <div class="sec-card" onclick="toggle('corretores')" id="card-corretores">
+    <div class="sec-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+    <div class="sec-label">Corretores</div>
+    <div class="sec-arrow">▾</div>
+  </div>
+  <div class="sec-card" onclick="toggle('agenda')" id="card-agenda">
+    <div class="sec-icon"><svg viewBox="0 0 24 24"><polyline points="9,11 12,14 22,4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+    <div class="sec-label">Agenda Estratégica</div>
+    <div class="sec-arrow">▾</div>
+  </div>
+
+</div>
+
+<!-- BARRA DE BUSCA FIXA -->
+<div class="search-bar-fixed">
+  <div class="search-bar-inner">
+    <div class="search-bar-icon">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </div>
+    <input class="search-bar-input" id="search-input" type="text"
+           placeholder="Pesquisar em todas as edições... ex: IOF, Hapvida, LC 213"
+           oninput="buscar(this.value)"
+           onfocus="document.getElementById('search-dropdown').classList.add('open')"
+           onblur="setTimeout(()=>document.getElementById('search-dropdown').classList.remove('open'),200)">
+    <span class="search-bar-count" id="search-count"></span>
+    <div class="search-bar-tags">
+      <span class="search-bar-tag active" onclick="filtrarTag('')">Todos</span>
+      <span class="search-bar-tag" onclick="filtrarTag('URGENTE')">#URGENTE</span>
+      <span class="search-bar-tag" onclick="filtrarTag('REGULAÇÃO')">#REG</span>
+      <span class="search-bar-tag" onclick="filtrarTag('OPORTUNIDADE')">#OPP</span>
+      <span class="search-bar-tag" onclick="filtrarTag('DESTAQUE SU')">#SU</span>
+      <span class="search-bar-tag" onclick="filtrarTag('INSURTECH')">#TECH</span>
+      <span class="search-bar-tag" onclick="filtrarTag('LC 213')">#LC213</span>
+    </div>
+    <div class="search-dropdown" id="search-dropdown"></div>
+  </div>
+</div>
+
+<!-- PAINÉIS -->
+<div id="panel-geral" class="acc-panel open"><div class="acc-inner"><div class="loading">Carregando...</div></div></div>
+<div class="panel-divider"></div>
+<div id="panel-saude" class="acc-panel"><div class="acc-inner"><div class="loading">Carregando...</div></div></div>
+<div class="panel-divider"></div>
+<div id="panel-odonto" class="acc-panel"><div class="acc-inner"><div class="loading">Carregando...</div></div></div>
+<div class="panel-divider"></div>
+<div id="panel-vida" class="acc-panel"><div class="acc-inner"><div class="loading">Carregando...</div></div></div>
+<div class="panel-divider"></div>
+<div id="panel-previdencia" class="acc-panel"><div class="acc-inner"><div class="loading">Carregando...</div></div></div>
+<div class="panel-divider"></div>
+<div id="panel-elementares" class="acc-panel"><div class="acc-inner"><div class="loading">Carregando...</div></div></div>
+<div class="panel-divider"></div>
+
+<!-- RADAR GLOBAL — conteúdo fixo com dados frescos desta edição -->
+<div id="panel-global" class="acc-panel">
+<div class="acc-inner">
+  <div class="alert-bar gl">
+    <span class="alert-ico">🌎</span>
+    <span>Monitoramento do mercado segurador global com <strong>filtro de relevância para o Brasil</strong>. Apenas movimentos com impacto direto ou indireto na estratégia da Seguros Unimed são incluídos. Fontes: Swiss Re Institute, Deloitte Insurance Outlook, Marsh GIMI, McKinsey.</span>
+  </div>
+  <div class="sec-block">
+    <div class="slabel">Movimentos Globais · Impacto para o Brasil — Mai/2026</div>
+    <div class="nfeed">
+
+      <div class="ncard">
+        <span class="ntag glob">GLOBAL</span>
+        <div class="ncontent">
+          <div class="nhead"><a href="https://urldefense.com/v3/__https://www.marsh.com/en/services/international-placement-services/insights/global-insurance-market-index.html__;!!OnnTiprQ9lQNDUOp!hgoPUiJinCfv0JRMj9LzUhodjL5IFCTULm2EeTxHtUkjuOuP34ZkTJQbSBBOssc7Ile6tjyluPEPX2rNf6rWpR41yVL0$" target="_blank">Marsh GIMI 1T26: taxas comerciais globais caem 5% pelo 7º trimestre consecutivo — mercado soft avança</a></div>
+          <div class="ntxt">Após 7 anos de altas, o mercado global de seguros comerciais entrou em ciclo de queda de taxas. Capacidade de resseguro em excesso e alta competição entre seguradoras ampliaram coberturas e reduziram prêmios em todas as regiões exceto EUA. Mercado property caiu <strong>9% globalmente</strong>. Cyber foi o único ramo com expansão simultânea de oferta e demanda.</div>
+          <div class="nmeta"><span>Marsh GIMI</span><span class="nmeta-dot"></span><a href="https://urldefense.com/v3/__https://www.marsh.com/en/services/international-placement-services/insights/global-insurance-market-index.html__;!!OnnTiprQ9lQNDUOp!hgoPUiJinCfv0JRMj9LzUhodjL5IFCTULm2EeTxHtUkjuOuP34ZkTJQbSBBOssc7Ile6tjyluPEPX2rNf6rWpR41yVL0$" target="_blank">Marsh</a><span class="nmeta-dot"></span><span>1T26</span></div>
+          <div class="impacto-br">🇧🇷 Impacto BR: resseguro mais barato reduz custos de retrocessão e pode ampliar capacidade de subscrição no Brasil</div>
+        </div>
+      </div>
+
+      <div class="ncard">
+        <span class="ntag glob">TENDÊNCIA</span>
+        <div class="ncontent">
+          <div class="nhead"><a href="https://urldefense.com/v3/__https://www.deloitte.com/gr/en/Industries/insurance/perspectives/2026-global-insurance-outlook.html__;!!OnnTiprQ9lQNDUOp!hgoPUiJinCfv0JRMj9LzUhodjL5IFCTULm2EeTxHtUkjuOuP34ZkTJQbSBBOssc7Ile6tjyluPEPX2rNf6rWpRgn_cNu$" target="_blank">Deloitte 2026 Global Insurance Outlook: IA agentica e eficiência operacional definem a nova era do setor</a></div>
+          <div class="ntxt">Setor global entra em fase de <strong>"mercado soft"</strong> após anos de altas agressivas. Crescimento moderado exige eficiência — seguradoras que não adotarem IA perderão competitividade à medida que o momentum de preços desacelera. <strong>IA agentica</strong> (sistemas que reagem a dados geoespaciais em tempo real) é o diferencial de 2026 em subscrição catastrófica.</div>
+          <div class="nmeta"><span>Deloitte</span><span class="nmeta-dot"></span><a href="https://urldefense.com/v3/__https://www.deloitte.com/gr/en/Industries/insurance/perspectives/2026-global-insurance-outlook.html__;!!OnnTiprQ9lQNDUOp!hgoPUiJinCfv0JRMj9LzUhodjL5IFCTULm2EeTxHtUkjuOuP34ZkTJQbSBBOssc7Ile6tjyluPEPX2rNf6rWpRgn_cNu$" target="_blank">Deloitte Insights</a><span class="nmeta-dot"></span><span>2026</span></div>
+          <div class="impacto-br">🇧🇷 Impacto BR: referência direta para o hub Stormia e agenda de IA da Seguros Unimed — o que o mercado global já opera, o Brasil adotará em 12–18 meses</div>
+        </div>
+      </div>
+
+      <div class="ncard">
+        <span class="ntag glob">LATAM</span>
+        <div class="ncontent">
+          <div class="nhead"><a href="https://urldefense.com/v3/__https://www.swissre.com/institute/research/topics-and-risk-dialogues/economy-and-insurance-outlook/latin-america-market-report-2025.html__;!!OnnTiprQ9lQNDUOp!hgoPUiJinCfv0JRMj9LzUhodjL5IFCTULm2EeTxHtUkjuOuP34ZkTJQbSBBOssc7Ile6tjyluPEPX2rNf6rWpfxuJbnH$" target="_blank">Swiss Re: prêmios Latam crescem +4% real em 2026 — Brasil lidera com 33% do mercado regional</a></div>
+          <div class="ntxt">Swiss Re projeta crescimento real de <strong>+4%</strong> nos prêmios totais da América Latina em 2026 (Vida+Saúde: +4,6% · Patrimonial: +3,2%). Brasil representa <strong>33% do mercado regional</strong>. GDP Latam cresce <strong>+2,1% em 2026</strong>. Inflação próxima ao teto das metas dos bancos centrais na região.</div>
+          <div class="nmeta"><span>Swiss Re Institute</span><span class="nmeta-dot"></span><a href="https://urldefense.com/v3/__https://www.swissre.com/institute/research/topics-and-risk-dialogues/economy-and-insurance-outlook/latin-america-market-report-2025.html__;!!OnnTiprQ9lQNDUOp!hgoPUiJinCfv0JRMj9LzUhodjL5IFCTULm2EeTxHtUkjuOuP34ZkTJQbSBBOssc7Ile6tjyluPEPX2rNf6rWpfxuJbnH$" target="_blank">Swiss Re</a><span class="nmeta-dot"></span><span>Nov/2025</span></div>
+          <div class="impacto-br">🇧🇷 Impacto BR: posição de liderança regional reforça o argumento estratégico de expansão — a Seguros Unimed como 2ª cooperativa da Latam tem papel central nesse crescimento</div>
+        </div>
+      </div>
+
+      <div class="ncard">
+        <span class="ntag glob">CYBER</span>
+        <div class="ncontent">
+          <div class="nhead"><a href="https://urldefense.com/v3/__https://www.swissre.com/institute/research/sigma-research.html__;!!OnnTiprQ9lQNDUOp!hgoPUiJinCfv0JRMj9LzUhodjL5IFCTULm2EeTxHtUkjuOuP34ZkTJQbSBBOssc7Ile6tjyluPEPX2rNf6rWpWUtp-QD$" target="_blank">Swiss Re sigma 07/2026: riscos de acumulação em data centers emergem como ameaça sistêmica ao setor</a></div>
+          <div class="ntxt">Novo sigma da Swiss Re (março/2026) alerta para concentração de risco em data centers e infraestrutura de nuvem. Um único evento pode gerar <strong>perdas correlacionadas massivas</strong> para múltiplas seguradoras simultaneamente. Cyber foi o único ramo global com expansão simultânea de oferta e demanda em 2026 — prêmios e coberturas crescendo juntos.</div>
+          <div class="nmeta"><span>Swiss Re sigma 07/2026</span><span class="nmeta-dot"></span><a href="https://urldefense.com/v3/__https://www.swissre.com/institute/research/sigma-research.html__;!!OnnTiprQ9lQNDUOp!hgoPUiJinCfv0JRMj9LzUhodjL5IFCTULm2EeTxHtUkjuOuP34ZkTJQbSBBOssc7Ile6tjyluPEPX2rNf6rWpWUtp-QD$" target="_blank">Swiss Re Institute</a><span class="nmeta-dot"></span><span>Mar/2026</span></div>
+          <div class="impacto-br">🇧🇷 Impacto BR: seguro cyber ainda subexplorado no Brasil — oportunidade de posicionamento antecipado pela SU via Elementares, especialmente no segmento de PME médicas</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="impl-box">
+    <div class="impl-title">⚡ Leitura Global para a Seguros Unimed</div>
+    <div class="impl-txt">Três sinais globais merecem atenção estratégica: (1) o <strong>mercado soft</strong> global vai chegar ao Brasil — quando chegar, margens técnicas serão pressionadas e eficiência operacional será o diferencial; (2) a <strong>IA agentica</strong> que o Deloitte cita já é agenda do Stormia — acelerar é imperativo; (3) o <strong>cyber</strong> crescendo globalmente enquanto o Brasil está subpenetrado é a oportunidade de Elementares mais clara dos próximos 24 meses.</div>
+  </div>
+</div>
+</div>
+<div class="panel-divider"></div>
+
+<div id="panel-concorrentes" class="acc-panel"><div class="acc-inner"><div class="loading">Carregando...</div></div></div>
+<div class="panel-divider"></div>
+<div id="panel-agenda" class="acc-panel"><div class="acc-inner"><div class="loading">Carregando...</div></div></div>
+<div class="panel-divider"></div>
+
+<!-- PAINEL BUSCA -->
+<div id="panel-corretores" class="acc-panel"><div class="acc-inner"><div class="loading">Carregando...</div></div></div>
+<div class="panel-divider"></div>
+
+<div id="panel-busca" class="acc-panel">
+<div class="acc-inner">
+  <div class="sec-block">
+    <div class="slabel">Pesquisa — Todas as Edições do Histórico</div>
+    <div class="search-wrap">
+      <div class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <input class="search-input" id="search-input" type="text"
+             placeholder="Busque por tema, empresa, regulação... ex: IOF, LC 213, Hapvida"
+             oninput="buscar(this.value)">
+      <span class="search-count" id="search-count"></span>
+    </div>
+    <div class="filter-tags" id="filter-tags">
+      <span class="filter-tag active" onclick="filtrarTag('')">Todos</span>
+      <span class="filter-tag" onclick="filtrarTag('URGENTE')">#URGENTE</span>
+      <span class="filter-tag" onclick="filtrarTag('REGULAÇÃO')">#REGULAÇÃO</span>
+      <span class="filter-tag" onclick="filtrarTag('OPORTUNIDADE')">#OPORTUNIDADE</span>
+      <span class="filter-tag" onclick="filtrarTag('DESTAQUE SU')">#DESTAQUE SU</span>
+      <span class="filter-tag" onclick="filtrarTag('ATENÇÃO')">#ATENÇÃO</span>
+      <span class="filter-tag" onclick="filtrarTag('INSURTECH')">#INSURTECH</span>
+      <span class="filter-tag" onclick="filtrarTag('GLOBAL')">#GLOBAL</span>
+      <span class="filter-tag" onclick="filtrarTag('LC 213')">#LC 213</span>
+    </div>
+    <div class="search-results" id="search-results">
+      <div class="search-empty"><span>🔍</span>Digite algo para pesquisar em todas as edições do histórico</div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="panel-divider"></div>
+
+<!-- PAINEL HISTÓRICO -->
+<div id="panel-historico" class="acc-panel">
+<div class="acc-inner">
+  <div class="alert-bar bl">
+    <span class="alert-ico">🗂️</span>
+    <span>Arquivo completo de todas as edições. Clique em qualquer card para carregar a edição completa.</span>
+  </div>
+  <div class="slabel">Todas as Edições</div>
+  <div class="historico-grid" id="historico-grid"><div class="loading">Carregando...</div></div>
+</div>
+</div>
+
+<!-- MODAL NEWSLETTER -->
+<div class="modal-overlay" id="modal-news" onclick="if(event.target===this)fecharNewsletter()">
+  <div class="modal">
+    <div class="modal-title">✉ Enviar Newsletter</div>
+    <div class="modal-sub">Envia os destaques da semana com link para o radar. O e-mail abre no seu cliente de e-mail já preenchido — você só clica em enviar.</div>
+    <div class="modal-label">Pré-visualização do e-mail</div>
+    <div class="modal-preview" id="news-preview">Carregando...</div>
+    <div class="modal-label" style="margin-bottom:6px">Destinatários — edite o arquivo <code style="background:var(--gray2);padding:1px 5px;border-radius:4px;font-size:11px">destinatarios.json</code> para gerenciar a lista</div>
+    <div id="dest-list" style="font-size:11px;color:var(--text2);margin-bottom:20px;font-family:'DM Mono',monospace;line-height:1.8"></div>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" onclick="fecharNewsletter()">Cancelar</button>
+      <button class="modal-btn send-gmail" onclick="enviarGmail()">Abrir no Gmail</button>
+      <button class="modal-btn send-outlook" onclick="enviarOutlook()">Abrir no Outlook</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Fontes: SUSEP · CNseg · Fenaprevi · ANS · Revista Apólice · Gazeta Mercantil · CQCS · Swiss Re · Deloitte · Marsh</p>
+  <p><span class="su">Gerência de Estratégia · Seguros Unimed</span> · Copiloto da Estratégia · <span id="footer-ed"></span></p>
+</footer>
+
+<script>
+// ─── ESTADO GLOBAL ────────────────────────────────────────────────────────────
+let DADOS = null;
+let edicaoAtual = null;
+let tagAtiva = '';
+let termoBusca = '';
+
+// ─── DESTINATÁRIOS (fallback — substitua por fetch do destinatarios.json) ────
+const DESTINATARIOS_DEFAULT = [
+  "diretoria@segurosunimed.com.br",
+  "superintendencia.estrategia@segurosunimed.com.br"
+];
+
+// ─── INICIALIZAÇÃO ────────────────────────────────────────────────────────────
+async function init() {
+  try {
+    const r = await fetch('noticias.json');
+    if (!r.ok) throw new Error();
+    DADOS = await r.json();
+  } catch { DADOS = FALLBACK; }
+  popularSelect();
+  carregarEdicao(DADOS.edicoes[0].id);
+}
+
+function popularSelect() {
+  const s = document.getElementById('edition-select');
+  s.innerHTML = DADOS.edicoes.map((e,i) =>
+    `<option value="${e.id}">${e.titulo}${i===0?' (atual)':''}</option>`
+  ).join('');
+}
+
+function carregarEdicao(id) {
+  edicaoAtual = DADOS.edicoes.find(e=>e.id===id) || DADOS.edicoes[0];
+  document.getElementById('edition-select').value = edicaoAtual.id;
+  document.getElementById('header-sub').textContent = `GERÊNCIA DE ESTRATÉGIA · SEGUROS UNIMED · ${edicaoAtual.titulo.toUpperCase()}`;
+  document.getElementById('footer-ed').textContent = edicaoAtual.titulo;
+  document.getElementById('edition-info').textContent = `Semana de ${edicaoAtual.data}`;
+  renderGeral(); renderSeg('saude'); renderSeg('odonto');
+  renderSeg('vida'); renderSeg('previdencia'); renderSeg('elementares');
+  renderConcorrentes(); renderCorretores(); renderAgenda(); renderHistorico();
+}
+
+// ─── RENDERIZADORES ───────────────────────────────────────────────────────────
+function n(noticia, termoDest) {
+  const url = noticia.url;
+  const titulo = termoDest ? highlight(noticia.titulo, termoDest) : noticia.titulo;
+  const texto  = termoDest ? highlight(noticia.texto,  termoDest) : noticia.texto;
+  const linkTitulo = url ? `<a href="${url}" target="_blank">${titulo}</a>` : titulo;
+  const metaFonte = noticia.fonte_url
+    ? `<a href="${noticia.fonte_url}" target="_blank">${noticia.fonte_label||noticia.fonte}</a>`
+    : (noticia.fonte_label || noticia.fonte || '');
+  return `<div class="ncard">
+    <span class="ntag ${noticia.tag}">${noticia.tag_label}</span>
+    <div class="ncontent">
+      <div class="nhead">${linkTitulo}</div>
+      <div class="ntxt">${texto}</div>
+      <div class="nmeta">
+        <span>${noticia.fonte}</span>
+        ${metaFonte && metaFonte !== noticia.fonte ? `<span class="nmeta-dot"></span>${metaFonte}` : ''}
+        ${noticia.data ? `<span class="nmeta-dot"></span><span>${noticia.data}</span>` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function highlight(txt, termo) {
+  if (!termo || !txt) return txt || '';
+  const re = new RegExp(`(${termo.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return txt.replace(re, '<mark>$1</mark>');
+}
+
+function renderGeral() {
+  const ed = edicaoAtual, s = ed.secoes.geral, t = ed.termometro;
+  const labels = {regulatorio:'Ambiente Regulatório',competitivo:'Clima Competitivo',sentimento:'Sentimento do Setor'};
+  set('panel-geral', `
+    <div class="alert-bar bl"><span class="alert-ico">📡</span>
+    <span>Edição da semana de <strong>${ed.data}</strong> · Curadoria estratégica do mercado segurador.</span></div>
+    <div class="sec-block">
+      <div class="slabel">Termômetro da Semana</div>
+      <div class="termometro">
+        ${['regulatorio','competitivo','sentimento'].map(k=>`
+          <div class="termo-card" style="cursor:${t[k].url?'pointer':'default'}" onclick="${t[k].url?`window.open('`+t[k].url+`','_blank')`:''}">
+            <div class="termo-indicator ${t[k].status}">${t[k].emoji}</div>
+            <div><div class="termo-label ${t[k].status}">${labels[k]}</div>
+            <div class="termo-status">${t[k].titulo}${t[k].url?` <span style="color:var(--azul-med);font-size:10px">↗</span>`:''}</div>
+            <div class="termo-reason">${t[k].texto}</div></div>
+          </div>`).join('')}
+      </div>
+    </div>
+    <div class="sec-block">
+      <div class="slabel">Destaques da Semana</div>
+      <div class="nfeed">${s.noticias.map(x=>n(x)).join('')}</div>
+    </div>
+    <div class="sec-block">
+      <div class="slabel">Vozes do Mercado</div>
+      <div class="vozes">${s.vozes.map(v=>`
+        <div class="voz-card">
+          <div class="voz-quote">${v.quote}</div>
+          <div class="voz-meta">
+            <div class="voz-avatar">${v.avatar}</div>
+            <div><div class="voz-name">${v.nome}</div><div class="voz-role">${v.cargo}</div></div>
+            <div class="voz-ctx">${v.contexto}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="impl-box">
+      <div class="impl-title">⚡ Implicações para a Seguros Unimed — ${ed.titulo}</div>
+      <div class="impl-txt">${s.implicacao}</div>
+    </div>`);
+}
+
+function renderSeg(id) {
+  const nomes = {saude:'Saúde Suplementar',odonto:'Odontologia',vida:'Seguro de Vida',previdencia:'Previdência Privada Aberta',elementares:'Ramos Elementares'};
+  const s = edicaoAtual.secoes[id];
+  set(`panel-${id}`, `
+    <div class="sec-block">
+      <div class="slabel">Notícias Estratégicas · ${nomes[id]}</div>
+      <div class="nfeed">${s.noticias.map(x=>n(x)).join('')}</div>
+    </div>
+    <div class="impl-box">
+      <div class="impl-title">⚡ Implicação para a Seguros Unimed · ${nomes[id]}</div>
+      <div class="impl-txt">${s.implicacao}</div>
+    </div>
+    <div class="opp-card">
+      <div class="opp-label">🚀 Oportunidade Estratégica</div>
+      <div class="opp-txt">${s.oportunidade}</div>
+    </div>`);
+}
+
+function cb(rank,nome,tipo,noticias,su=false) {
+  const s = su ? 'border-color:#005EB8;box-shadow:0 0 0 2px rgba(0,94,184,.12)' : '';
+  const hs = su ? 'background:var(--azul-light);border-bottom-color:var(--azul-line)' : '';
+  return `<div class="comp-block" style="${s}">
+    <div class="comp-header" style="${hs}">
+      <span class="comp-rank" style="${su?'background:var(--verde)':''}">${rank}</span>
+      <span class="comp-name" style="${su?'color:var(--azul)':''}">${nome}</span>
+      <span class="comp-type" style="${su?'color:var(--azul-med);border-color:var(--azul-line)':''}">${tipo}</span>
+    </div>
+    <div class="comp-body"><div class="nfeed">${noticias.map(x=>n(x)).join('')}</div></div>
+  </div>`;
+}
+
+function renderConcorrentes() {
+  set('panel-concorrentes', `
+    <div class="alert-bar bl"><span class="alert-ico">🔭</span>
+    <span>Monitoramento das <strong>10 principais seguradoras</strong>. Seguros Unimed na <strong>8ª posição</strong>.</span></div>
+    ${cb('1ª','Bradesco Seguros / Bradesco Saúde','Bancassurance · Grupo Bradesco',[
+      {tag:'hot',tag_label:'ESCALA',titulo:'OdontoPrev lidera odonto com +8 mi de beneficiários e múltiplas marcas',url:'https://www.beneficiosrh.com.br/maiores-operadoras-planos-odontologicos/',texto:'Bradesco Dental, Prívian, Prontodente e BB Dental. <strong>Maior rede credenciada do Brasil.</strong> Capital aberto na B3 (ODPV3).',fonte:'ANS',fonte_url:'https://www.beneficiosrh.com.br/maiores-operadoras-planos-odontologicos/',fonte_label:'BenefíciosRH',data:''},
+      {tag:'reg',tag_label:'VOZ',titulo:'Ney Dias lidera discussões no Enconseg 2026',url:'https://revistaapolice.com.br/2026/05/enconseg-2026-debate-desafios-e-futuro-do-mercado-segurador/',texto:'Bradesco Seguros mantém posição de <strong>maior grupo segurador da América Latina</strong> com influência dominante na agenda SUSEP e CNseg.',fonte:'Sincor-RJ',fonte_url:'https://revistaapolice.com.br/2026/05/enconseg-2026-debate-desafios-e-futuro-do-mercado-segurador/',fonte_label:'Revista Apólice',data:'Mai/2026'}
+    ])}
+    ${cb('2ª','SulAmérica Seguros','Grupo Generali · Capital Aberto',[
+      {tag:'new',tag_label:'RESULTADO',titulo:'SulAmérica encerra 1T26 com alta de 7,9% na receita líquida',url:'https://revistaapolice.com.br/2026/05/susep-setor-arrecada-r-1061-bilhoes-ate-marco/',texto:'Forte em Saúde e Vida corporativo — <strong>concorrente direta da SU no B2B</strong>.',fonte:'SulAmérica',fonte_url:'https://revistaapolice.com.br/2026/05/susep-setor-arrecada-r-1061-bilhoes-ate-marco/',fonte_label:'Revista Apólice',data:'Mai/2026'}
+    ])}
+    ${cb('3ª','Porto Seguro','Capital Aberto · B3: PSSA3',[
+      {tag:'new',tag_label:'RESULTADO',titulo:'Porto inicia 2026 com dois dígitos no lucro recorrente',url:'https://revistaapolice.com.br/2026/05/susep-setor-arrecada-r-1061-bilhoes-ate-marco/',texto:'Líder em Auto. <strong>Porto Saúde</strong> com 763 mil beneficiários concorre com a SU nas praças premium.',fonte:'Porto Seguro',fonte_url:'https://revistaapolice.com.br/2026/05/susep-setor-arrecada-r-1061-bilhoes-ate-marco/',fonte_label:'Revista Apólice',data:'Mai/2026'}
+    ])}
+    ${cb('4ª','Hapvida / NotreDame Intermédica','Grupo Viveo · B3: HAPV3',[
+      {tag:'hot',tag_label:'ESTRATÉGIA',titulo:'Hapvida mantém modelo verticalizado com hospitais próprios — vantagem de custo estrutural',url:'',texto:'Maior grupo de saúde do Brasil. Hospitais próprios garantem custo estruturalmente inferior. <strong>Líder no Norte e Nordeste.</strong> Monitorar deleveraging em 2026.',fonte:'Hapvida · ANS',fonte_url:'',fonte_label:'',data:'Mar/2025'}
+    ])}
+    ${cb('5ª','Icatu Seguros','Capital Fechado · Vida e Previdência',[
+      {tag:'opp',tag_label:'POSIÇÃO',titulo:'Icatu: referência em Vida e Previdência com modelo independente de bancassurance',url:'',texto:'Principal seguradora independente em Vida e Previdência via corretores. Forte em <strong>planejamento sucessório e proteção patrimonial</strong>.',fonte:'Icatu · SUSEP 2025',fonte_url:'',fonte_label:'',data:''}
+    ])}
+    ${cb('6ª','Amil Saúde','Grupo Seripieri · Capital Fechado desde 2024',[
+      {tag:'wtf',tag_label:'MONITORAR',titulo:'Amil sob novo controle de Seripieri — reposicionamento estratégico em curso',url:'',texto:'<strong>4ª maior operadora</strong> do Brasil. Foco em PME e grandes empresas. <strong>Monitorar movimentos de produto e distribuição ao longo de 2026.</strong>',fonte:'Amil · 2024–2026',fonte_url:'',fonte_label:'',data:''}
+    ])}
+    ${cb('7ª','Caixa Seguridade','Bancassurance · B3: CXSE3',[
+      {tag:'reg',tag_label:'AÇÃO',titulo:'Caixa ativa plano emergencial para segurados impactados por chuvas',url:'https://revistaapolice.com.br/2026/05/susep-setor-arrecada-r-1061-bilhoes-ate-marco/',texto:'Forte em Habitacional — beneficiária direta do MCMV. Distribuição via <strong>rede da Caixa Econômica Federal</strong>.',fonte:'Caixa Seguridade',fonte_url:'https://revistaapolice.com.br/2026/05/susep-setor-arrecada-r-1061-bilhoes-ate-marco/',fonte_label:'Revista Apólice',data:'Mai/2026'}
+    ])}
+    ${cb('8ª ★','Seguros Unimed','Cooperativa · NÓS',[
+      {tag:'new',tag_label:'NÓS',titulo:'Unimed Odonto 1,3 mi · NPS nº 1 Brasil · nota máxima ANS/SUSEP pelo 6º ano · 3ª melhor seguradora BR',url:'',texto:'<strong>6,6 milhões de segurados</strong> em saúde com presença em 92% do território. 2ª cooperativa seguradora da América Latina.',fonte:'Seguros Unimed · Mar/2026',fonte_url:'',fonte_label:'',data:''}
+    ], true)}
+    ${cb('9ª','BB Seguros / Brasilseg','Bancassurance · Banco do Brasil',[
+      {tag:'wtf',tag_label:'CONTEXTO',titulo:'BB Seguros forte em Rural — segmento pressionado por inadimplência e PSR incerto',url:'',texto:'Rural projeta retração em 2026. Participa da <strong>Brasildental</strong> (joint-venture com OdontoPrev).',fonte:'BB Seguros · IRB · 2025–2026',fonte_url:'',fonte_label:'',data:''}
+    ])}
+    ${cb('10ª','Zurich Santander','Bancassurance · Grupo Zurich',[
+      {tag:'opp',tag_label:'POSIÇÃO',titulo:'Zurich Santander consolida bancassurance corporativo internacional',url:'',texto:'Forte em <strong>seguros corporativos</strong> via rede Santander. <strong>Menor sobreposição direta</strong> com o portfólio atual da SU.',fonte:'Zurich · Santander · SUSEP 2025',fonte_url:'',fonte_label:'',data:''}
+    ])}
+    <div class="impl-box" style="margin-top:16px">
+      <div class="impl-title">⚡ Leitura Competitiva da Semana</div>
+      <div class="impl-txt">SulAmérica (+7,9%) e Porto (dois dígitos no lucro) confirmam crescimento robusto dos líderes. <strong>Amil sob novo controle</strong> é o concorrente a monitorar com mais atenção. <strong>Loovi no sandbox</strong> sinaliza que insurtechs digitais vão pressionar o Auto nos próximos 18 meses.</div>
+    </div>`);
+}
+
+
+function renderCorretores() {
+  set('panel-corretores', `
+    <div class="alert-bar bl"><span class="alert-ico">🤝</span>
+    <span>Monitoramento do <strong>canal de corretores</strong> — movimentos das grandes corretoras, o que o mercado oferece ao corretor e perguntas estratégicas para a alta direção. Cadência: <strong>quinzenal</strong>.</span></div>
+
+    <!-- TERMÔMETRO DO CANAL -->
+    <div class="sec-block">
+      <div class="slabel">Termômetro do Canal</div>
+      <div class="termometro">
+        <div class="termo-card" style="cursor:pointer" onclick="window.open('https://revistaapolice.com.br/2026/05/enconseg-2026-debate-desafios-e-futuro-do-mercado-segurador/','_blank')">
+          <div class="termo-indicator att">🔥</div>
+          <div>
+            <div class="termo-label att">Atividade do Canal</div>
+            <div class="termo-status">Aquecido ↗</div>
+            <div class="termo-reason">Enconseg 2026 reuniu corretores e seguradoras com casa cheia. Categoria investe em qualificação e diversificação de carteira. Forte movimento de networking entre entidades.</div>
+          </div>
+        </div>
+        <div class="termo-card" style="cursor:pointer" onclick="window.open('https://revistaapolice.com.br/2026/02/bradesco-seguros-fortalece-presenca-digital-dos-corretores-em-novo-programa/','_blank')">
+          <div class="termo-indicator bad">⚡</div>
+          <div>
+            <div class="termo-label bad">Disputa pelo Canal</div>
+            <div class="termo-status">Intensa ↗</div>
+            <div class="termo-reason">Porto lança "Acelera Seguro Vida" com 35% de desconto. Bradesco cria "Com Você Corretor On". SulAmérica lança plataforma de e-commerce para corretores. Canal muito disputado.</div>
+          </div>
+        </div>
+        <div class="termo-card" style="cursor:pointer" onclick="window.open('https://cqcs.com.br/noticia/corretores-de-seguros-na-era-dos-algoritmos-os-tres-anos-que-testarao-a-permanencia-no-mercado/','_blank')">
+          <div class="termo-indicator att">📱</div>
+          <div>
+            <div class="termo-label att">Digitalização do Canal</div>
+            <div class="termo-status">Em Aceleração ↗</div>
+            <div class="termo-reason">IA, plataformas digitais e multicálculo dominam a agenda. ENS TechVillage leva inovação para corretores. Transformação digital é irreversível — corretor que não se adaptar perde espaço.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRANDES CORRETORAS -->
+    <div class="sec-block">
+      <div class="slabel">Grandes Corretoras & Brokers — Movimentos Estratégicos</div>
+
+      <div class="comp-block">
+        <div class="comp-header">
+          <span class="comp-rank" style="background:#1D4ED8">Global</span>
+          <span class="comp-name">Marsh Brasil</span>
+          <span class="comp-type">Marsh McLennan · Broker Global</span>
+        </div>
+        <div class="comp-body"><div class="nfeed">
+          <div class="ncard"><span class="ntag reg">POSIÇÃO</span><div class="ncontent">
+            <div class="nhead">Marsh mantém liderança em riscos corporativos complexos e resseguro no Brasil</div>
+            <div class="ntxt">Maior broker global com forte presença no segmento corporativo brasileiro. Foco em <strong>riscos complexos, D&O, cyber e resseguro</strong>. Clientes: grandes empresas, multinacionais e setor público. Canal com menor sobreposição direta ao portfólio de varejo da SU, mas relevante em Elementares e Garantia.</div>
+            <div class="nmeta"><span>Marsh McLennan</span><span class="nmeta-dot"></span><span>2026</span></div>
+          </div></div>
+        </div></div>
+      </div>
+
+      <div class="comp-block">
+        <div class="comp-header">
+          <span class="comp-rank" style="background:#1D4ED8">Global</span>
+          <span class="comp-name">Aon Brasil</span>
+          <span class="comp-type">Aon PLC · Broker Global</span>
+        </div>
+        <div class="comp-body"><div class="nfeed">
+          <div class="ncard"><span class="ntag new">MOVIMENTO</span><div class="ncontent">
+            <div class="nhead"><a href="https://cqcs.com.br" target="_blank">Aon anuncia Fabio Martinez como novo Head of Health & Talent para o Brasil</a></div>
+            <div class="ntxt">Reforço na área de <strong>Saúde e Benefícios Corporativos</strong> com perfil atuarial. Sinaliza aposta da Aon no segmento de saúde empresarial — terreno onde a Seguros Unimed também compete. Aon e Redkik firmaram parceria em 2025 para seguros com tecnologia, ampliando capacidade digital no canal.</div>
+            <div class="nmeta"><span>Aon Brasil</span><span class="nmeta-dot"></span><a href="https://www.insurtech.com.br/seguros/mercado-em-movimento-marco-de-2026/" target="_blank">InsurTech BR</a><span class="nmeta-dot"></span><span>Mar/2026</span></div>
+          </div></div>
+        </div></div>
+      </div>
+
+      <div class="comp-block">
+        <div class="comp-header">
+          <span class="comp-rank" style="background:#1D4ED8">Global</span>
+          <span class="comp-name">Willis Towers Watson</span>
+          <span class="comp-type">WTW · Broker Global</span>
+        </div>
+        <div class="comp-body"><div class="nfeed">
+          <div class="ncard"><span class="ntag opp">CONTEXTO</span><div class="ncontent">
+            <div class="nhead">WTW mantém foco em benefícios corporativos e gestão de riscos no Brasil</div>
+            <div class="ntxt">Forte em <strong>benefícios, previdência corporativa e riscos de pessoas</strong>. Relevante para a Seguros Unimed especialmente nos ramos de Vida e Previdência corporativa. Segmento onde a SU tem lacuna estratégica e o WTW atua como influenciador de compra para grandes empregadores.</div>
+            <div class="nmeta"><span>Willis Towers Watson</span><span class="nmeta-dot"></span><span>2026</span></div>
+          </div></div>
+        </div></div>
+      </div>
+
+      <div class="comp-block">
+        <div class="comp-header">
+          <span class="comp-rank">Nacional</span>
+          <span class="comp-name">Wiz Co</span>
+          <span class="comp-type">B3: WIZC3 · Corretora Nacional</span>
+        </div>
+        <div class="comp-body"><div class="nfeed">
+          <div class="ncard"><span class="ntag wtf">MONITORAR</span><div class="ncontent">
+            <div class="nhead"><a href="https://cqcs.com.br" target="_blank">Wiz Co é a única corretora de seguros no ranking das 1000 maiores empresas do Brasil</a></div>
+            <div class="ntxt">Maior corretora nacional independente. Forte em bancassurance via parcerias (Banco Inter, ex-CEF). Presente em <strong>400 municípios</strong> do Brasil. Luis Capobianco assumiu como Superintendente de Crédito na Wiz Corporate em março/2026 — reforço em crédito sinaliza diversificação de atuação além do seguro tradicional.</div>
+            <div class="nmeta"><span>Wiz Co · CQCS</span><span class="nmeta-dot"></span><a href="https://www.insurtech.com.br/seguros/mercado-em-movimento-marco-de-2026/" target="_blank">InsurTech BR</a><span class="nmeta-dot"></span><span>Mar/2026</span></div>
+          </div></div>
+        </div></div>
+      </div>
+
+      <div class="comp-block">
+        <div class="comp-header">
+          <span class="comp-rank">Nacional</span>
+          <span class="comp-name">Grupo Assure de Seguros</span>
+          <span class="comp-type">Corretora Nacional · Fenacor</span>
+        </div>
+        <div class="comp-body"><div class="nfeed">
+          <div class="ncard"><span class="ntag reg">VOZ</span><div class="ncontent">
+            <div class="nhead"><a href="https://cqcs.com.br/noticia/enconseg-2026-reune-corretores-e-seguradores-para-discutirem-o-futuro-do-mercado/" target="_blank">Henrique Brandão Junior (Assure) eleito Vice-Presidente de Relação com o Mercado da Fenacor</a></div>
+            <div class="ntxt">Liderança crescente na Fenacor sinaliza maior influência do Grupo Assure na pauta regulatória e de relacionamento com seguradoras. Brandão defendeu no Enconseg 2026 que <strong>"o corretor continuará sendo muito importante, mas precisa buscar aprimoramento constante"</strong>. Corretora com forte atuação no Rio de Janeiro.</div>
+            <div class="nmeta"><span>Fenacor · CQCS</span><span class="nmeta-dot"></span><a href="https://cqcs.com.br/noticia/enconseg-2026-reune-corretores-e-seguradores-para-discutirem-o-futuro-do-mercado/" target="_blank">CQCS</a><span class="nmeta-dot"></span><span>Mai/2026</span></div>
+          </div></div>
+        </div></div>
+      </div>
+
+    </div>
+
+    <!-- O QUE O MERCADO OFERECE AO CORRETOR -->
+    <div class="sec-block">
+      <div class="slabel">Benchmark — O que as Melhores Seguradoras fazem pelo Corretor</div>
+      <div class="nfeed">
+
+        <div class="ncard"><span class="ntag hot">BENCHMARK</span><div class="ncontent">
+          <div class="nhead"><a href="https://www.revistacobertura.com.br/noticias/instituicoes/no-ccs-sp-ceo-da-porto-seguro-fala-sobre-momento-de-expansao-e-do-compromisso-com-os-corretores/" target="_blank">Porto Seguro: campanha "Acelera Seguro Vida" com 35% de desconto + "A Voz do Corretor" como prática permanente</a></div>
+          <div class="ntxt">CEO Patricia Chacon declarou no CCS-SP: <em>"Para a Porto, corretor é para sempre."</em> A empresa criou internamente <strong>"A Voz do Corretor"</strong> — escuta ativa em campo, eventos e canais digitais, com registro em sistema online e acompanhamento de execução. Campanhas "Acelera Auto Day" e "Fecha com a Porto" geraram cross-sell: clientes com média de 2 produtos vs 1,4 em 2020.</div>
+          <div class="nmeta"><span>Porto Seguro · CCS-SP</span><span class="nmeta-dot"></span><a href="https://www.revistacobertura.com.br/noticias/instituicoes/no-ccs-sp-ceo-da-porto-seguro-fala-sobre-momento-de-expansao-e-do-compromisso-com-os-corretores/" target="_blank">Revista Cobertura</a><span class="nmeta-dot"></span><span>Mar/2026</span></div>
+        </div></div>
+
+        <div class="ncard"><span class="ntag hot">BENCHMARK</span><div class="ncontent">
+          <div class="nhead"><a href="https://revistaapolice.com.br/2026/02/bradesco-seguros-fortalece-presenca-digital-dos-corretores-em-novo-programa/" target="_blank">Bradesco Seguros lança "Com Você Corretor On" — programa para capacitar corretores nas redes sociais</a></div>
+          <div class="ntxt">Iniciativa piloto que capacita corretores para atuação digital e redes sociais — além do Portal de Negócios, app exclusivo e suporte por WhatsApp. <strong>Bradesco Seguros já tem portal, app, treinamentos e agora adiciona presença digital como diferencial de parceria</strong>. Pacote de relacionamento com o corretor mais completo do mercado.</div>
+          <div class="nmeta"><span>Bradesco Seguros</span><span class="nmeta-dot"></span><a href="https://revistaapolice.com.br/2026/02/bradesco-seguros-fortalece-presenca-digital-dos-corretores-em-novo-programa/" target="_blank">Revista Apólice</a><span class="nmeta-dot"></span><span>Fev/2026</span></div>
+        </div></div>
+
+        <div class="ncard"><span class="ntag hot">BENCHMARK</span><div class="ncontent">
+          <div class="nhead"><a href="https://www.insurtalks.com.br/posts/sulamerica-lanca-plataforma-para-corretores-criarem-seus-proprios-sites-de-vendas-de-seguro-de-vida" target="_blank">SulAmérica lança "Meu Contrata Fácil" — corretor cria seu próprio e-commerce de Seguro de Vida gratuitamente</a></div>
+          <div class="ntxt">Plataforma gratuita e personalizável onde o corretor cria sua loja online com marca própria, vende 24h, acompanha carrinhos abandonados e gera relatórios de vendas. <strong>Único no mercado</strong> — combina autonomia do corretor com estrutura da seguradora. Disponível via Portal do Corretor SulAmérica.</div>
+          <div class="nmeta"><span>SulAmérica</span><span class="nmeta-dot"></span><a href="https://www.insurtalks.com.br/posts/sulamerica-lanca-plataforma-para-corretores-criarem-seus-proprios-sites-de-vendas-de-seguro-de-vida" target="_blank">InsurTalks</a></div>
+        </div></div>
+
+        <div class="ncard"><span class="ntag new">TENDÊNCIA</span><div class="ncontent">
+          <div class="nhead"><a href="https://cqcs.com.br/noticia/corretores-de-seguros-na-era-dos-algoritmos-os-tres-anos-que-testarao-a-permanencia-no-mercado/" target="_blank">Corretores na era dos algoritmos: os 3 anos que definirão quem permanece no mercado</a></div>
+          <div class="ntxt">Fenacor e Sincor-SP investem em capacitação digital e IA para preparar corretores para a transformação irreversível do setor. <strong>ENS TechVillage</strong> levou experiência imersiva de inovação para corretores no ConsegNNE. Seguradoras que oferecerem suporte tecnológico ao corretor terão vantagem competitiva no canal.</div>
+          <div class="nmeta"><span>Fenacor · Sincor-SP · CQCS</span><span class="nmeta-dot"></span><a href="https://cqcs.com.br/noticia/corretores-de-seguros-na-era-dos-algoritmos-os-tres-anos-que-testarao-a-permanencia-no-mercado/" target="_blank">CQCS</a><span class="nmeta-dot"></span><span>Fev/2026</span></div>
+        </div></div>
+
+      </div>
+    </div>
+
+    <!-- VOZ DO CORRETOR -->
+    <div class="sec-block">
+      <div class="slabel">Voz do Corretor — O que o Canal espera das Seguradoras</div>
+      <div class="vozes">
+
+        <div class="voz-card">
+          <div class="voz-quote">Hoje, o consumidor já nasce com um celular na mão. Quer tudo rápido e transparente. Mas, na hora de um sinistro, não abre mão da empatia e do atendimento humano que só o Corretor pode oferecer.</div>
+          <div class="voz-meta">
+            <div class="voz-avatar">AV</div>
+            <div><div class="voz-name">Armando Vergilio</div><div class="voz-role">Presidente · Fenacor</div></div>
+            <div class="voz-ctx">Enconseg 2026 · Mai/2026</div>
+          </div>
+        </div>
+
+        <div class="voz-card">
+          <div class="voz-quote">O Corretor precisa estar sempre junto do segurado para oferecer múltiplos produtos e soluções de acordo com as necessidades do cliente. É indispensável ficar alerta às mudanças regulatórias.</div>
+          <div class="voz-meta">
+            <div class="voz-avatar">BB</div>
+            <div><div class="voz-name">Boris Ber</div><div class="voz-role">Presidente · Sincor-SP</div></div>
+            <div class="voz-ctx">Enconseg 2026 · Mai/2026</div>
+          </div>
+        </div>
+
+        <div class="voz-card">
+          <div class="voz-quote">O corretor não opera o algoritmo, mas traduz o que ele produz em termos que o cliente compreende e pode contestar. Esse é o papel estratégico da intermediação qualificada.</div>
+          <div class="voz-meta">
+            <div class="voz-avatar">MM</div>
+            <div><div class="voz-name">Manuel Matos</div><div class="voz-role">Delegado Sincor-SP · Fenacor</div></div>
+            <div class="voz-ctx">ConsegNNE · Mar/2026</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="opp-card" style="margin-top:12px">
+      <div class="opp-label">🚀 Oportunidade Estratégica</div>
+      <div class="opp-txt">A Seguros Unimed tem um diferencial único para o canal: <strong>o médico cooperado como aliado natural do corretor</strong> — nenhuma concorrente tem esse ativo. Um programa de parceria corretor-médico Unimed para indicação e venda conjunta de Vida, Odonto e Saúde seria inédito no mercado e de baixo custo de implementação.</div>
+    </div>
+  `);
+}
+
+function renderAgenda() {
+  const ed = edicaoAtual;
+  set('panel-agenda', `
+    <div class="alert-bar bl"><span class="alert-ico">🎯</span>
+    <span>Síntese da semana traduzida em <strong>movimentos acionáveis</strong> para a Seguros Unimed.</span></div>
+    <div class="slabel">O que a semana pede da Seguros Unimed</div>
+    <div class="agenda">${ed.agenda.map((a,i)=>`
+      <div class="agenda-item">
+        <div class="agenda-num">${i+1}</div>
+        <div>
+          <div class="agenda-title">${a.titulo}</div>
+          <div class="agenda-txt">${a.texto}</div>
+          <div class="agenda-tags">${a.tags.map(t=>`<span class="agenda-tag ${t.tipo}">${t.label}</span>`).join('')}</div>
+        </div>
+      </div>`).join('')}
+    </div>`);
+}
+
+function renderHistorico() {
+  document.getElementById('historico-grid').innerHTML = DADOS.edicoes.map((ed,i)=>`
+    <div class="hist-card ${ed.id===edicaoAtual?.id?'atual':''}" onclick="irParaEdicao('${ed.id}')">
+      <span class="hist-badge ${i===0?'atual':'old'}">${i===0?'● Edição Atual':'Edição Anterior'}</span>
+      <div class="hist-titulo">${ed.titulo}</div>
+      <div class="hist-data">Semana de ${ed.data}</div>
+      <div class="hist-resumo">${ed.secoes.geral.noticias.length} notícias · ${ed.agenda.length} movimentos · ${ed.secoes.geral.vozes.length} vozes</div>
+      <div class="hist-btn">Ver edição completa →</div>
+    </div>`).join('');
+}
+
+// ─── BUSCA ────────────────────────────────────────────────────────────────────
+function coletarTodasNoticias() {
+  const todas = [];
+  DADOS.edicoes.forEach(ed => {
+    const segs = ['geral','saude','odonto','vida','previdencia','elementares'];
+    segs.forEach(s => {
+      if (ed.secoes[s]?.noticias) {
+        ed.secoes[s].noticias.forEach(noticia => {
+          todas.push({ ...noticia, _edicao: ed.titulo, _edicaoId: ed.id });
+        });
+      }
+    });
+  });
+  return todas;
+}
+
+function buscar(termo) {
+  termoBusca = termo.trim().toLowerCase();
+  renderBusca();
+}
+
+function filtrarTag(tag) {
+  tagAtiva = tag;
+  document.querySelectorAll('.search-bar-tag').forEach(el => {
+    el.classList.toggle('active', (el.textContent.replace('#','') === tag.replace('#','')) || (tag==='' && el.textContent==='Todos'));
+  });
+  renderBusca();
+}
+
+function renderBusca() {
+  const todas = coletarTodasNoticias();
+  const dropdown = document.getElementById('search-dropdown');
+  const countEl = document.getElementById('search-count');
+
+  if (!termoBusca && !tagAtiva) {
+    dropdown.innerHTML = '';
+    dropdown.classList.remove('open');
+    countEl.textContent = '';
+    return;
+  }
+
+  const resultados = todas.filter(noticia => {
+    const matchTag = !tagAtiva || noticia.tag_label === tagAtiva;
+    const matchTermo = !termoBusca || (
+      (noticia.titulo || '').toLowerCase().includes(termoBusca) ||
+      (noticia.texto  || '').toLowerCase().includes(termoBusca) ||
+      (noticia.fonte  || '').toLowerCase().includes(termoBusca)
+    );
+    return matchTag && matchTermo;
+  });
+
+  countEl.textContent = resultados.length ? `${resultados.length} resultado${resultados.length>1?'s':''}` : '';
+
+  if (!resultados.length) {
+    dropdown.innerHTML = '<div class="search-drop-empty">😔 Nenhum resultado encontrado. Tente outro termo.</div>';
+    dropdown.classList.add('open');
+    return;
+  }
+
+  dropdown.innerHTML = resultados.slice(0, 12).map(noticia => `
+    <div class="search-drop-item">
+      <div class="search-drop-edicao">${noticia._edicao} · ${noticia.tag_label}</div>
+      <div class="search-drop-titulo">
+        ${noticia.url
+          ? `<a href="${noticia.url}" target="_blank" style="color:var(--text);text-decoration:none;font-weight:600" onmouseover="this.style.color='var(--azul-med)'" onmouseout="this.style.color='var(--text)'">${highlight(noticia.titulo.replace(/<[^>]*>/g,''), termoBusca)} <span style="color:var(--azul-med)">↗</span></a>`
+          : `<span style="font-weight:600">${highlight(noticia.titulo.replace(/<[^>]*>/g,''), termoBusca)}</span>`
+        }
+      </div>
+      <div class="search-drop-meta" style="display:flex;justify-content:space-between;align-items:center">
+        <span>${noticia.fonte}${noticia.data ? ' · ' + noticia.data : ''}</span>
+        <span style="cursor:pointer;color:var(--azul-med);font-size:9px;font-family:'DM Mono',monospace" onclick="irParaEdicao('${noticia._edicaoId}')">Ver edição →</span>
+      </div>
+    </div>`).join('');
+
+  if (resultados.length > 12) {
+    dropdown.innerHTML += `<div class="search-drop-empty" style="padding:10px;font-size:10px">+${resultados.length - 12} resultados. Refine a busca para ver mais.</div>`;
+  }
+
+  dropdown.classList.add('open');
+}
+
+function abrirDropdown() {
+  if (termoBusca || tagAtiva) {
+    document.getElementById('search-dropdown').classList.add('open');
+  }
+}
+
+function fecharDropdown() {
+  document.getElementById('search-dropdown').classList.remove('open');
+}
+
+// ─── NEWSLETTER ───────────────────────────────────────────────────────────────
+function abrirNewsletter() {
+  const ed = edicaoAtual;
+  const destaques = ed.secoes.geral.noticias.slice(0,3).map(n =>
+    `• ${n.titulo.replace(/<[^>]*>/g,'')}`
+  ).join('\n');
+
+  const preview = `
+    <strong>Assunto:</strong> 📡 Copiloto da Estratégia · ${ed.titulo}<br><br>
+    <strong>Corpo:</strong><br>
+    Prezados,<br><br>
+    A edição desta semana do Copiloto da Estratégia está disponível. Destaques:<br><br>
+    ${ed.secoes.geral.noticias.slice(0,3).map(n=>`• ${n.titulo.replace(/<[^>]*>/g,'')}`).join('<br>')}
+    <br><br>
+    🔗 Acesse o radar completo:<br>
+    <strong>https://segurosunimed.github.io/radar_da_estrategia</strong><br><br>
+    Gerência de Estratégia · Seguros Unimed`;
+
+  document.getElementById('news-preview').innerHTML = preview;
+  document.getElementById('dest-list').innerHTML = DESTINATARIOS_DEFAULT.map(d => `📧 ${d}`).join('<br>');
+  document.getElementById('modal-news').classList.add('open');
+}
+
+function fecharNewsletter() {
+  document.getElementById('modal-news').classList.remove('open');
+}
+
+function montarEmailParams() {
+  const ed = edicaoAtual;
+  const assunto = encodeURIComponent(`📡 Copiloto da Estratégia · ${ed.titulo}`);
+  const corpo = encodeURIComponent(
+`Prezados,
+
+A edição desta semana do Copiloto da Estratégia está disponível.
+
+Destaques da semana:
+${ed.secoes.geral.noticias.slice(0,3).map(n=>`• ${n.titulo.replace(/<[^>]*>/g,'')}`).join('\n')}
+
+Acesse o radar completo com todas as análises por segmento, movimentos de concorrentes e agenda estratégica:
+https://segurosunimed.github.io/radar_da_estrategia
+
+Gerência de Estratégia · Seguros Unimed`
+  );
+  return { assunto, corpo };
+}
+
+function enviarOutlook() {
+  const { assunto, corpo } = montarEmailParams();
+  const dest = DESTINATARIOS_DEFAULT.join(';');
+  window.location.href = `mailto:${encodeURIComponent(dest)}?subject=${assunto}&body=${corpo}`;
+  fecharNewsletter();
+}
+
+function enviarGmail() {
+  const { assunto, corpo } = montarEmailParams();
+  const dest = DESTINATARIOS_DEFAULT.join(',');
+  window.open(`https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(dest)}&su=${assunto}&body=${corpo}`, '_blank');
+  fecharNewsletter();
+}
+
+// ─── PPTX ─────────────────────────────────────────────────────────────────────
+function gerarPPTX() {
+  const ed = edicaoAtual;
+  const msg = `Para gerar o PPTX desta edição, abra o projeto no Claude e use o comando:\n\n"Gera o PPTX do Copiloto da Estratégia — ${ed.titulo}"\n\nO Claude vai gerar os slides com os dados desta edição e entregar o arquivo para download.`;
+  alert(msg);
+}
+
+// ─── NAVEGAÇÃO ────────────────────────────────────────────────────────────────
+function toggle(id) {
+  const panel = document.getElementById('panel-'+id);
+  const card  = document.getElementById('card-'+id);
+  const isOpen = panel.classList.contains('open');
+  document.querySelectorAll('.acc-panel').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.sec-card').forEach(c=>c.classList.remove('open'));
+  if (!isOpen) {
+    panel.classList.add('open');
+    if (card) card.classList.add('open');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+
+function irParaEdicao(id) {
+  carregarEdicao(id);
+  document.querySelectorAll('.acc-panel').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.sec-card').forEach(c=>c.classList.remove('open'));
+  document.getElementById('panel-geral').classList.add('open');
+  document.getElementById('card-geral').classList.add('open');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function set(id, html) {
+  document.querySelector(`#${id} .acc-inner`).innerHTML = html;
+}
+
+// ─── FALLBACK OFFLINE ─────────────────────────────────────────────────────────
+const FALLBACK = {"edicoes":[{"id":"2026-05-14","titulo":"Edição 14/Mai/2026","data":"14 de maio de 2026","termometro":{"regulatorio":{"status":"att","emoji":"⚖️","titulo":"Atenção","texto":"LC 213 e Nova Lei de Seguros em regulamentação ativa na SUSEP. ~20 novas normas previstas para 2026."},"competitivo":{"status":"ok","emoji":"📈","titulo":"Favorável","texto":"Vida acelerou +11,6% no 1T26, Auto cresce e Elementares são oceano azul."},"sentimento":{"status":"att","emoji":"🧭","titulo":"Cauteloso","texto":"IOF sobre VGBL comprime previdência. Selic acima de 12% pressiona demanda."}},"secoes":{"geral":{"noticias":[{"tag":"hot","tag_label":"URGENTE","titulo":"SUSEP: setor supera R$100 bi no 1T26 com Vida como maior expansão do mercado","url":"https://revistaapolice.com.br/2026/05/susep-setor-arrecada-r-1061-bilhoes-ate-marco/","texto":"Receitas totais de <strong>R$106,18 bilhões</strong> no 1T26. Seguro de Vida liderou com alta de <strong>+11,63% nominal</strong>.","fonte":"SUSEP","fonte_url":"https://revistaapolice.com.br/2026/05/susep-setor-arrecada-r-1061-bilhoes-ate-marco/","fonte_label":"Revista Apólice","data":"Mai/2026"},{"tag":"hot","tag_label":"ATENÇÃO","titulo":"Previdência Aberta recua 8% no 1T26: IOF sobre VGBL comprime captações","url":"https://revistaapolice.com.br/2026/05/previdencia-aberta-recua-8-no-primeiro-trimestre/","texto":"Prêmios e contribuições totalizaram <strong>R$41,3 bilhões</strong>, queda de R$3,6 bi vs 1T25.","fonte":"Fenaprevi","fonte_url":"https://revistaapolice.com.br/2026/05/previdencia-aberta-recua-8-no-primeiro-trimestre/","fonte_label":"Revista Apólice","data":"Mai/2026"},{"tag":"new","tag_label":"DESTAQUE SU","titulo":"Unimed Odonto atinge 1,3 mi de beneficiários — NPS nº 1 Brasil pelo 4º ano","url":"https://revistaapolice.com.br/2026/03/unimed-odonto-atinge-13-mi-de-beneficiarios/","texto":"Marco histórico em março/2026. CAGR de <strong>18% ao ano</strong>.","fonte":"Seguros Unimed","fonte_url":"https://revistaapolice.com.br/2026/03/unimed-odonto-atinge-13-mi-de-beneficiarios/","fonte_label":"Revista Apólice","data":"Mar/2026"}],"vozes":[{"quote":"O consumidor não compara mais companhias, mas experiências.","avatar":"RS","nome":"Roberto Santos","cargo":"Presidente · CNseg","contexto":"Enconseg 2026 · Mai/2026"},{"quote":"O crescimento do setor está mais ligado à percepção de risco do que ao ciclo econômico.","avatar":"ND","nome":"Ney Dias","cargo":"Presidente · Bradesco Seguros / FenSeg","contexto":"Enconseg 2026 · Mai/2026"}],"implicacao":"O 1T26 confirma que <strong>Vida é o ramo de maior aceleração do setor</strong>. A <strong>LC 213/2025</strong> é a movimentação regulatória mais relevante."},"saude":{"noticias":[{"tag":"wtf","tag_label":"CUSTO","titulo":"Reajuste coletivos 9,9% em 2026: menor em 5 anos, mas 2,6× acima do IPCA","url":"https://gazetamercantil.com/planos-de-saude-coletivos-reajuste-ans-2026","texto":"ANS registra reajuste médio de <strong>9,9%</strong> nos planos coletivos. Teto ANS para individuais sobe para <strong>7,5%</strong>.","fonte":"ANS","fonte_url":"https://gazetamercantil.com/planos-de-saude-coletivos-reajuste-ans-2026","fonte_label":"Gazeta Mercantil","data":"Mai/2026"}],"implicacao":"A <strong>LC 213</strong> é a movimentação regulatória mais relevante para a SU.","oportunidade":"Base de <strong>53 milhões de vínculos</strong> ainda crescendo e forte fora das capitais."},"odonto":{"noticias":[{"tag":"new","tag_label":"MARCO SU","titulo":"Unimed Odonto atinge 1,3 mi de beneficiários com crescimento de 318% em 8 anos","url":"https://revistaapolice.com.br/2026/03/unimed-odonto-atinge-13-mi-de-beneficiarios/","texto":"CAGR de <strong>18% ao ano</strong>. Quarto ano consecutivo como <strong>melhor NPS do Brasil</strong>.","fonte":"Seguros Unimed","fonte_url":"https://revistaapolice.com.br/2026/03/unimed-odonto-atinge-13-mi-de-beneficiarios/","fonte_label":"Revista Apólice","data":"Mar/2026"}],"implicacao":"Odonto é o segmento onde a SU tem a <strong>posição competitiva mais diferenciada</strong>.","oportunidade":"Bundling <strong>Saúde + Odonto</strong> via cooperativas médicas é proposta de valor única."},"vida":{"noticias":[{"tag":"new","tag_label":"ACELERAÇÃO","titulo":"Vida cresce +11,63% nominal no 1T26 — maior expansão entre todos os ramos","url":"https://revistaapolice.com.br/2026/05/susep-setor-arrecada-r-1061-bilhoes-ate-marco/","texto":"Seguro de Vida com <strong>maior crescimento real</strong> (+6,58%) entre todos os ramos no 1T26.","fonte":"SUSEP","fonte_url":"https://revistaapolice.com.br/2026/05/susep-setor-arrecada-r-1061-bilhoes-ate-marco/","fonte_label":"Revista Apólice","data":"Mai/2026"}],"implicacao":"Vida é o ramo de maior crescimento e onde a SU tem a <strong>maior lacuna estratégica</strong>.","oportunidade":"O <strong>Universal Life</strong> pode posicionar a SU como referência em proteção financeira."},"previdencia":{"noticias":[{"tag":"hot","tag_label":"CRISE","titulo":"Previdência Aberta recua 8% no 1T26","url":"https://revistaapolice.com.br/2026/05/previdencia-aberta-recua-8-no-primeiro-trimestre/","texto":"Ativos cresceram 13% a/a para <strong>R$1,8 trilhão</strong>. IOF desincentivou R$50 bi em captações.","fonte":"Fenaprevi","fonte_url":"https://revistaapolice.com.br/2026/05/previdencia-aberta-recua-8-no-primeiro-trimestre/","fonte_label":"Revista Apólice","data":"Mai/2026"}],"implicacao":"O problema é tributário. Estratégia: <strong>proteger carteira via PGBL</strong> e reposicionar para garantia de crédito.","oportunidade":"O <strong>PGBL</strong> não foi impactado pelo IOF da mesma forma. Migração de discurso preserva carteira."},"elementares":{"noticias":[{"tag":"opp","tag_label":"OCEANO AZUL","titulo":"Enconseg 2026: Oceano de oportunidades em Ramos Elementares","url":"https://revistaapolice.com.br/2026/05/enconseg-2026-debate-desafios-e-futuro-do-mercado-segurador/","texto":"Mercado <strong>subpenetrado</strong> com digitalização abrindo novos canais.","fonte":"Sincor-RJ","fonte_url":"https://revistaapolice.com.br/2026/05/enconseg-2026-debate-desafios-e-futuro-do-mercado-segurador/","fonte_label":"Revista Apólice","data":"Mai/2026"}],"implicacao":"A SU tem <strong>6,6 milhões de segurados em saúde como base de cross-sell</strong>.","oportunidade":"<strong>Garantia Judicial</strong> e <strong>Seguro Paramétrico Climático</strong> são apostas para 2026–2027."}},"agenda":[{"titulo":"Mapear impactos da LC 213/2025 no modelo cooperativo antes que a SUSEP finalize a regulamentação","texto":"<strong>Quem influenciar a regulamentação infralegal define as regras do jogo para os próximos anos.</strong>","tags":[{"label":"Urgente","tipo":"urgente"},{"label":"Regulação","tipo":""}]},{"titulo":"Definir postura estratégica em Vida: crescimento ativo ou manutenção de carteira?","texto":"Vida cresce +11,6% e a SU está na 14ª posição. <strong>Maior gap entre oportunidade e posição da companhia.</strong>","tags":[{"label":"Urgente","tipo":"urgente"},{"label":"Vida","tipo":""}]},{"titulo":"Acelerar parceria com as 205 Unimeds ainda não integradas ao Unimed Odonto","texto":"<strong>Cada Unimed ativada é crescimento orgânico sem custo de aquisição de canal.</strong>","tags":[{"label":"Urgente","tipo":"urgente"},{"label":"Odonto","tipo":""}]}]}]};
+
+init();
+</script>
+</body>
+</html>
