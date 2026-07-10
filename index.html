@@ -31,7 +31,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .edition-select:focus{border-color:var(--azul-med)}
 
 /* NAV GRID */
-.section-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:0;background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:61px;z-index:90;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.section-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:0;background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:61px;z-index:90;box-shadow:0 2px 8px rgba(0,0,0,.06)}
 .sec-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:11px 4px;cursor:pointer;border-right:1px solid var(--border);background:var(--white);transition:background .15s;border-bottom:3px solid transparent;user-select:none}
 .sec-card:last-child{border-right:none}
 .sec-card:hover{background:var(--gray1)}
@@ -569,6 +569,18 @@ footer .su{color:var(--azul-med);font-weight:700}
     <div class="sec-label">Radar Global</div>
     <div class="sec-arrow">▾</div>
   </div>
+  <!-- Canais -->
+  <div class="sec-card" onclick="toggle('canais')" id="card-canais">
+    <div class="sec-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="7" r="3"/><circle cx="13" cy="16" r="3"/><line x1="9" y1="10" x2="12" y2="14"/><line x1="17" y1="10" x2="14" y2="14"/></svg></div>
+    <div class="sec-label">Canais</div>
+    <div class="sec-arrow">▾</div>
+  </div>
+  <!-- Tendências de Consumo -->
+  <div class="sec-card" onclick="toggle('tendencias')" id="card-tendencias">
+    <div class="sec-icon"><svg viewBox="0 0 24 24"><polyline points="3,17 9,11 13,15 21,6"/><polyline points="15,6 21,6 21,12"/></svg></div>
+    <div class="sec-label">Tendências de Consumo</div>
+    <div class="sec-arrow">▾</div>
+  </div>
   <!-- Concorrentes -->
   <div class="sec-card" onclick="toggle('concorrentes')" id="card-concorrentes">
     <div class="sec-icon"><svg viewBox="0 0 24 24"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg></div>
@@ -610,6 +622,8 @@ footer .su{color:var(--azul-med);font-weight:700}
       <span class="search-bar-tag" onclick="filtrarTag('DESTAQUE SU')">#SU</span>
       <span class="search-bar-tag" onclick="filtrarTag('INSURTECH')">#TECH</span>
       <span class="search-bar-tag" onclick="filtrarTag('LC 213')">#LC213</span>
+      <span class="search-bar-tag" onclick="filtrarTag('COOPERATIVISMO')">#COOPERATIVISMO</span>
+      <span class="search-bar-tag" onclick="filtrarTag('TENDÊNCIA')">#TENDÊNCIAS</span>
     </div>
     <div class="search-dropdown" id="search-dropdown"></div>
   </div>
@@ -627,6 +641,10 @@ footer .su{color:var(--azul-med);font-weight:700}
 <div id="panel-previdencia" class="acc-panel"><div class="acc-inner"><div class="loading">Carregando...</div></div></div>
 <div class="panel-divider"></div>
 <div id="panel-elementares" class="acc-panel"><div class="acc-inner"><div class="loading">Carregando...</div></div></div>
+<div class="panel-divider"></div>
+<div id="panel-canais" class="acc-panel"><div class="acc-inner"><div class="loading">Carregando...</div></div></div>
+<div class="panel-divider"></div>
+<div id="panel-tendencias" class="acc-panel"><div class="acc-inner"><div class="loading">Carregando...</div></div></div>
 <div class="panel-divider"></div>
 
 <!-- RADAR GLOBAL — conteúdo fixo com dados frescos desta edição -->
@@ -720,6 +738,8 @@ footer .su{color:var(--azul-med);font-weight:700}
       <span class="filter-tag" onclick="filtrarTag('INSURTECH')">#INSURTECH</span>
       <span class="filter-tag" onclick="filtrarTag('GLOBAL')">#GLOBAL</span>
       <span class="filter-tag" onclick="filtrarTag('LC 213')">#LC 213</span>
+      <span class="filter-tag" onclick="filtrarTag('COOPERATIVISMO')">#COOPERATIVISMO</span>
+      <span class="filter-tag" onclick="filtrarTag('TENDÊNCIA')">#TENDÊNCIAS</span>
     </div>
     <div class="search-results" id="search-results">
       <div class="search-empty"><span>🔍</span>Digite algo para pesquisar em todas as edições do histórico</div>
@@ -802,6 +822,7 @@ function carregarEdicao(id) {
   document.getElementById('edition-info').textContent = `Semana de ${edicaoAtual.data}`;
   renderGeral(); renderSeg('saude'); renderSeg('odonto');
   renderSeg('vida'); renderSeg('previdencia'); renderSeg('elementares');
+  renderSeg('canais'); renderSeg('tendencias');
   renderConcorrentes(); renderCorretores(); renderAgenda(); renderHistorico();
 }
 
@@ -888,8 +909,14 @@ function noticiasConcorrentesSegmento(id) {
 }
 
 function renderSeg(id) {
-  const nomes = {saude:'Saúde Suplementar',odonto:'Odontologia',vida:'Seguro de Vida',previdencia:'Previdência Privada Aberta',elementares:'Ramos Elementares'};
+  const nomes = {saude:'Saúde Suplementar',odonto:'Odontologia',vida:'Seguro de Vida',previdencia:'Previdência Privada Aberta',elementares:'Ramos Elementares',canais:'Canais · Cooperativismo',tendencias:'Tendências de Consumo'};
   const s = edicaoAtual.secoes[id];
+  if (!s) {
+    set(`panel-${id}`, `
+    <div class="alert-bar bl"><span class="alert-ico">🗂️</span>
+    <span>Esta seção (<strong>${nomes[id]}</strong>) foi incluída a partir de uma edição mais recente e não está disponível para <strong>${edicaoAtual.titulo}</strong>. Selecione uma edição mais atual no seletor acima.</span></div>`);
+    return;
+  }
   const concorrentesDoSegmento = noticiasConcorrentesSegmento(id).slice(0, 3);
   set(`panel-${id}`, `
     <div class="sec-block">
@@ -1035,7 +1062,7 @@ function renderHistorico() {
 function coletarTodasNoticias() {
   const todas = [];
   DADOS.edicoes.forEach(ed => {
-    const segs = ['geral','saude','odonto','vida','previdencia','elementares'];
+    const segs = ['geral','saude','odonto','vida','previdencia','elementares','canais','tendencias'];
     segs.forEach(s => {
       if (ed.secoes[s]?.noticias) {
         ed.secoes[s].noticias.forEach(noticia => {
